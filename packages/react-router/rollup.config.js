@@ -1,0 +1,39 @@
+import babel from 'rollup-plugin-babel'
+import uglify from 'rollup-plugin-uglify'
+import replace from 'rollup-plugin-replace'
+import commonjs from 'rollup-plugin-commonjs'
+import resolve from 'rollup-plugin-node-resolve'
+
+const config = {
+  entry: 'modules/index.js',
+  moduleName: 'ReactRouter',
+  globals: {
+    react: 'React',
+    'prop-types': 'PropTypes'
+  },
+  external: [
+    'react'
+  ],
+  plugins: [
+    babel({
+      exclude: 'node_modules/**'
+    }),
+    resolve(),
+    commonjs({
+      include: /node_modules/,
+      namedExports: {
+        'node_modules/prop-types/index.js': ['PropTypes']
+      }
+    })
+  ]
+}
+
+if (process.env.BABEL_ENV === 'umd') {
+  config.plugins.push(replace({ "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV) }))
+}
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(uglify())
+}
+
+export default config
