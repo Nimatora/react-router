@@ -1,7 +1,7 @@
 import expect from 'expect'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MemoryRouter from 'react-router/MemoryRouter'
+import { MemoryRouter } from 'react-router'
 import HashRouter from '../HashRouter'
 import Link from '../Link'
 
