@@ -7,6 +7,12 @@ const gzipSize = require('gzip-size')
 if (inInstall())
   process.exit(0)
 
+
+// don't bundle dependencies for es/cjs builds
+const pkg = require('../package.json')
+const deps = Object.keys(pkg.dependencies).map(key => key)
+const depsString = deps.join(',')
+
 const exec = (command, extraEnv) =>
   execSync(command, {
     stdio: 'inherit',
@@ -15,30 +21,34 @@ const exec = (command, extraEnv) =>
 
 console.log('Building CommonJS modules ...')
 
-exec('babel modules -d . --ignore __tests__', {
-  BABEL_ENV: 'cjs'
-})
+exec(
+  `rollup -c -f es -o dist/react-router.es.js -e ${depsString}`,
+  { NODE_ENV: 'development', BABEL_ENV: 'es' }
+)
 
 console.log('\nBuilding ES modules ...')
 
-exec('babel modules -d es --ignore __tests__', {
-  BABEL_ENV: 'es'
-})
+exec(
+  `rollup -c -f cjs -o dist/react-router.common.js -e ${depsString}`,
+  { NODE_ENV: 'development', BABEL_ENV: 'cjs' }
+)
 
 console.log('\nBuilding react-router.js ...')
 
-exec('webpack modules/index.js umd/react-router.js', {
-  NODE_ENV: 'production'
-})
+exec(
+  `rollup -c -f umd -o dist/react-router.js`,
+  { NODE_ENV: 'development', BABEL_ENV: 'umd' }
+)
 
 console.log('\nBuilding react-router.min.js ...')
 
-exec('webpack -p modules/index.js umd/react-router.min.js', {
-  NODE_ENV: 'production'
-})
+exec(
+  `rollup -c -f umd -o dist/react-router.min.js`,
+  { NODE_ENV: 'production', BABEL_ENV: 'umd' }
+)
 
 const size = gzipSize.sync(
-  fs.readFileSync('umd/react-router.min.js')
+  fs.readFileSync('dist/react-router.min.js')
 )
 
 console.log('\ngzipped, the UMD build is %s', prettyBytes(size))

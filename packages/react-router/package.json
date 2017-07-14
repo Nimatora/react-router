@@ -9,21 +9,10 @@
     "Ryan Florence"
   ],
   "files": [
-    "MemoryRouter.js",
-    "Prompt.js",
-    "Redirect.js",
-    "Route.js",
-    "Router.js",
-    "StaticRouter.js",
-    "Switch.js",
-    "index.js",
-    "matchPath.js",
-    "withRouter.js",
-    "es",
-    "umd"
+    "dist"
   ],
-  "main": "index.js",
-  "module": "es/index.js",
+  "main": "dist/react-router.common.js",
+  "module": "dist/react-router.es.js",
   "scripts": {
     "build": "node ./tools/build.js",
     "watch": "babel ./modules -d . --ignore __tests__ --watch",
@@ -49,6 +38,7 @@
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.10",
     "babel-plugin-dev-expression": "^0.2.1",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.2.11",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.5.0",
@@ -71,6 +61,12 @@
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.3.0",
+    "rollup": "^0.45.2",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-replace": "^1.1.1",
+    "rollup-plugin-uglify": "^2.0.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },
